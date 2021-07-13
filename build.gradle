@@ -1,0 +1,163 @@
+allprojects {
+    apply plugin: 'java'
+    version = '0.1.0'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://maven.springframework.org/release"
+        }
+        maven {
+            url "https://maven.restlet.com"
+        }
+    }
+}
+
+project(':core') {
+    dependencies {
+        implementation 'com.google.code.gson:gson:2.5'
+    }
+}
+
+project(':heuristic') {
+    dependencies {
+        compile project(':core')
+    }
+    jar {
+        destinationDir = file("$rootDir")
+        manifest {
+            attributes 'Main-Class': 'be.kuleuven.stgp.heuristic.MoveTexExperimentsMain'
+        }
+        from {
+            configurations.runtime.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        archiveName = "stgp-heuristic.jar"
+        from sourceSets.main.output
+    }
+}
+
+project(':mip') {
+    dependencies {
+        implementation 'com.google.code.gson:gson:2.5'
+        compile project(':core')
+        compile files('../lib/cplex.jar')
+        compile files('../lib/gurobi.jar')
+        //compile files('../lib/mp-.jar')
+        compile files('../lib/mp-0.1.0.jar')
+    }
+    task bp(type: Jar) {
+        dependsOn compileJava
+        destinationDir = file("$rootDir")
+        manifest {
+            attributes 'Main-Class': 'be.kuleuven.stgp.mip.column_generation.BranchAndPriceParallel'
+        }
+        from {
+            configurations.runtime.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        archiveName = "stgp-bp.jar"
+        from sourceSets.main.output
+    }
+    task cg(type: Jar) {
+        dependsOn compileJava
+        destinationDir = file("$rootDir")
+        manifest {
+            attributes 'Main-Class': 'be.kuleuven.stgp.mip.column_generation.ColumnGeneration'
+        }
+        from {
+            configurations.runtime.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        archiveName = "stgp-cg.jar"
+        from sourceSets.main.output
+    }
+    task mip1(type: Jar) {
+        dependsOn compileJava
+        destinationDir = file("$rootDir")
+        manifest {
+            attributes 'Main-Class': 'be.kuleuven.stgp.mip.mip.MIP_1'
+        }
+        from {
+            configurations.runtime.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        archiveName = "stgp-mip1.jar"
+        from sourceSets.main.output
+    }
+    task mip1_2(type: Jar) {
+        dependsOn compileJava
+        destinationDir = file("$rootDir")
+        manifest {
+            attributes 'Main-Class': 'be.kuleuven.stgp.mip.mip.MIP_1_2'
+        }
+        from {
+            configurations.runtime.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        archiveName = "stgp-mip1_2.jar"
+        from sourceSets.main.output
+    }
+    task mip2(type: Jar) {
+        dependsOn compileJava
+        destinationDir = file("$rootDir")
+        manifest {
+            attributes 'Main-Class': 'be.kuleuven.stgp.mip.mip.MIP_2'
+        }
+        from {
+            configurations.runtime.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        archiveName = "stgp-mip2.jar"
+        from sourceSets.main.output
+    }
+    task mip3(type: Jar) {
+        dependsOn compileJava
+        destinationDir = file("$rootDir")
+        manifest {
+            attributes 'Main-Class': 'be.kuleuven.stgp.mip.column_generation.BranchAndPriceParallel'
+        }
+        from {
+            configurations.runtime.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        archiveName = "stgp-mip3.jar"
+        from sourceSets.main.output
+    }
+    artifacts {
+        archives bp
+        archives cg
+        archives mip1
+        archives mip2
+        archives mip3
+    }
+}
+
+project(':validator') {
+    dependencies {
+        implementation 'com.google.code.gson:gson:2.5'
+        compile project(':core')
+    }
+    jar {
+        destinationDir = file("$rootDir")
+        manifest {
+            attributes 'Main-Class': 'be.kuleuven.stgp.validator.Validator'
+        }
+        from {
+            configurations.runtime.collect {
+                it.isDirectory() ? it : zipTree(it)
+            }
+        }
+        archiveName = "stgp-validator.jar"
+    }
+}
