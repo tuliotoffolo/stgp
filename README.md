@@ -25,6 +25,10 @@ Heuristic:
 Validator:
 ``java -jar stgp-validator.jar <problem_file> <solution_file>``
 
+### Instance and solution files
+
+Instance and solution files are available at http://benchmark.gent.cs.kuleuven.be/stgp/
+
 ### Requirements
 
 Java 1.8 and Gson 2.5 are required. Additionaly, libraries for *Cplex* and *Gurobi* must be included within the 'lib' folder.
