@@ -1,7 +1,6 @@
 # MacOS files
 .gradle
 *.DS_Store
-*.py
 
 # Compiled class file
 *.class
